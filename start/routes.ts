@@ -1,18 +1,9 @@
-/*
-|--------------------------------------------------------------------------
-| Routes file
-|--------------------------------------------------------------------------
-|
-| The routes file is used for defining the HTTP routes.
-|
-*/
+//Archivo de rutas
+
+import './routes/UsuariosRoute.js'
 
 
-import router from '@adonisjs/core/services/router'
-import './routes/UsuariosRoute.ts'
 
-router.get('/', async () => {
-  return {
-    hello: 'world',
-  }
-})
+
+
+
