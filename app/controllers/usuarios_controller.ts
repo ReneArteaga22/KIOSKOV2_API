@@ -2,8 +2,12 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Usuario from '#models/usuario'
 
 export default class UsuariosController {
-    public async index ({}:HttpContext){
-        return "hola"
+    public async index ({response}:HttpContext){
+        const Users = await Usuario.all()
+        return response.status(200).json({
+            title: 'Success',
+            usuarios: Users
+        })
     }
 
     async register({request, response}:HttpContext){
