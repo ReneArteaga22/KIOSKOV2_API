@@ -11,9 +11,10 @@ const corsConfig = defineConfig({
   origin: true,
   methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE'],
   headers: true,
-  exposeHeaders: [],
+  exposeHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
   maxAge: 90,
 })
+
 
 export default corsConfig

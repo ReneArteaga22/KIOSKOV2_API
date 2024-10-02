@@ -22,10 +22,11 @@ server.errorHandler(() => import('#exceptions/handler'))
  * requests, even if there is no route registered for
  * the request URL.
  */
+
 server.use([
+  () => import('@adonisjs/cors/cors_middleware'),
   () => import('#middleware/container_bindings_middleware'),
   () => import('#middleware/force_json_response_middleware'),
-  () => import('@adonisjs/cors/cors_middleware'),
 ])
 
 /**
@@ -41,3 +42,4 @@ router.use([() => import('@adonisjs/core/bodyparser_middleware'), () => import('
 export const middleware = router.named({
   auth: () => import('#middleware/auth_middleware')
 })
+
