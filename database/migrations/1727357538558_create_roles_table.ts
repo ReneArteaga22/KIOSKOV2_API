@@ -8,8 +8,8 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('nombre',255).notNullable().unique()
       table.string('slug',255).notNullable().unique()
-      table.datetime('created_at')
-      table.datetime('updated_at')
+      table.datetime('created_at').notNullable()
+      table.datetime('updated_at').nullable()
     })
   }
 

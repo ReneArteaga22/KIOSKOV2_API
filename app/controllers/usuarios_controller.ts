@@ -16,7 +16,7 @@ export default class UsuariosController {
     }
 
     async register({request, response}:HttpContext){
-        const {nombre, apellidos, usuario, contrasena, firma, correo, telefono, foto} = request.body()
+        const {nombre, apellidos, usuario, contrasena, firma, correo, telefono, foto, id_planta} = request.body()
 
         const nuevoUsuario = new User
         nuevoUsuario.nombre = nombre
@@ -27,6 +27,7 @@ export default class UsuariosController {
         nuevoUsuario.correo = correo
         nuevoUsuario.telefono = telefono
         nuevoUsuario.foto = foto
+        nuevoUsuario.id_planta = id_planta
 
         nuevoUsuario.save()
 
@@ -45,9 +46,11 @@ export default class UsuariosController {
         .firstOrFail()
 
         if (await hash.verify(usuario.contrasena, contrasena)) {
+            const token = await User.accessTokens.create(usuario)
             return response.status(200).json({
                 titulo:'exito',
-                mensaje:'Inicio de sesion exitoso'
+                mensaje:'Inicio de sesion exitoso',
+                token:token
             })
         }
         else{

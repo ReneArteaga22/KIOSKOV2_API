@@ -33,6 +33,8 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare foto:string
   @column()
+  declare id_planta:number
+  @column()
   declare id_rol:number
 
   @belongsTo(() => User)

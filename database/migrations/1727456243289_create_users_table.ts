@@ -16,6 +16,7 @@ export default class extends BaseSchema {
       table.string('telefono',255).notNullable()
       table.string('foto',255).notNullable()
       table.integer('id_rol').unsigned().references('id').inTable('roles').defaultTo(4)
+      table.integer('id_planta').unsigned().references('id').inTable('plantas')
       table.datetime('created_at').notNullable()
       table.datetime('updated_at').nullable()
     })
