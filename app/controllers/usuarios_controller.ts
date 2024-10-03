@@ -67,12 +67,33 @@ export default class UsuariosController {
                 mensaje:'Contraseña o usuario incorrectos'
             })
         }
-       
+    }
 
-
-    
-   
+    async recuperar_contrasena({request, response}:HttpContext){
+        const {correo, nuevaContrasena} = request.body()
+        const usuario = await Usuario.findByOrFail('correo',correo)
+        const contrasenaNuevaHash = await hash.make(nuevaContrasena)
         
- 
+        if(!usuario){
+            return response.status(404).json({
+                titulo:'Error',
+                mensaje:'Usuario no existe'
+            })
+        }
+
+        if(usuario.correo === correo){
+            usuario.contrasena = contrasenaNuevaHash
+            await usuario.save()
+
+            return response.status(200).json({
+                titulo:'Exito!',
+                mensaje:'Contraseña recuperada con exito'
+            })
+        }else{
+            return response.status(400).json({
+                titulo:'Error',
+                mensaje:'Contraseña o usuario incorrectos'
+            })
+        }
     }
 }
