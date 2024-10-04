@@ -1,7 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Employee from '#models/employee'
-import { messages } from '@vinejs/vine/defaults'
-
 
 export default class EmployeesController {
     public async index({ response }: HttpContext) {
