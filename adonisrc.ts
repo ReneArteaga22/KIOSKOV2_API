@@ -22,6 +22,7 @@ export default defineConfig({
   |
   */
   providers: [
+    () => import('@adonisjs/cors/cors_provider'),
     () => import('@adonisjs/core/providers/app_provider'),
     () => import('@adonisjs/core/providers/hash_provider'),
     {
@@ -30,7 +31,8 @@ export default defineConfig({
     },
     () => import('@adonisjs/core/providers/vinejs_provider'),
     () => import('@adonisjs/cors/cors_provider'),
-    () => import('@adonisjs/lucid/database_provider')
+    () => import('@adonisjs/lucid/database_provider'),
+    () => import('@adonisjs/auth/auth_provider')
   ],
 
   /*
