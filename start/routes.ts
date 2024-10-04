@@ -1,10 +1,16 @@
 //Archivo de rutas
 import router from '@adonisjs/core/services/router'
 import './routes/UsuariosRoute.js'
+import EmployeesController from '#controllers/employees_controller'
 
 router.get('/', async () => {
     return { hello: 'your route works!' }
   })
+
+  router.get('/employees', async (ctx) => {
+    const controller = new EmployeesController()
+    return await controller.index(ctx)
+})
 
 
 

@@ -58,6 +58,7 @@
     "@adonisjs/lucid": "^21.2.0",
     "@vinejs/vine": "^2.1.0",
     "luxon": "^3.5.0",
+    "mssql": "^11.0.1",
     "mysql2": "^3.11.3",
     "reflect-metadata": "^0.2.2"
   },
