@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('calificacion',255).notNullable()
       table.string('comentario',255).nullable()
-      table.string('planta',255).notNullable()
+      table.string('planta',255).nullable()
       table.string('servicio',255).notNullable()
       table.datetime('created_at').notNullable()
       table.datetime('updated_at').nullable()
