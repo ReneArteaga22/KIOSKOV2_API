@@ -4,6 +4,7 @@ import router from '@adonisjs/core/services/router'
 import EmployeesController from '#controllers/employees_controller'
 
 import './routes/UsuariosRoute.ts'
+import './routes/EvaluacionRoute.ts'
 
 router.get('/', async () => {
     return { hello: 'your route works!' }
