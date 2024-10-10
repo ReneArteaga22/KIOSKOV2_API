@@ -93,29 +93,21 @@ export default class UsuariosController {
 
     async buscar_usuario({ response, request }: HttpContext) {
         const { nombre, area } = request.body()
-        
-        let query = User.query();
-    
-        if (nombre) {
-            query = query.where('nombre', 'like', `%${nombre}%`)
-            .orWhere('apellidos', 'like', `%${nombre}%`);
+
+        let query = User.query()
+
+        if(nombre){
+            query = query.where('nombre','like',`%${nombre}%`)
         }
-    
-        if (area) {
-            query = query.where('area', 'like', `%${area}%`);
+        if(area){
+            query = query.where('area',area)
         }
-    
-        const usuarios = await query;
-        if (usuarios.length === 0) {
-            return response.status(404).json({
-                titulo: 'No encontrado',
-                mensaje: 'No se encontraron usuarios con los criterios proporcionados',
-            });
-        }
+
+        const filtro = await User.query()
+
         return response.status(200).json({
-            titulo: 'Éxito',
-            mensaje: 'Usuarios encontrados',
-            usuarios: usuarios,
-        });
+            titulo:'smn',
+            filtro:filtro
+        })
     }
 }

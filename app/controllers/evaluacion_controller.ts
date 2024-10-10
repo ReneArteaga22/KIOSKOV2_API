@@ -42,4 +42,29 @@ export default class EvaluacionController {
             evaluaciones:evaluacionTransporte
         })
     }
+
+    
+    async filtrar_evaluaciones_comedor({ response, request }: HttpContext) {
+        const { calificacion, planta } = request.body()
+
+        let query = Evaluacion.query()
+
+        if (calificacion) {
+            query = query.where('calificacion', 'like', `%${calificacion}%`)
+            query = query.andWhere('servicio','comedor')
+        }
+    
+        if (planta) {
+            query = query.where('planta', planta)
+            query = query.andWhere('servicio','comedor')
+        }
+
+       const filtro = await query
+
+        return response.status(200).json({
+            titulo:'smn',
+            filtro:filtro
+        })
+    }
+    
 }
