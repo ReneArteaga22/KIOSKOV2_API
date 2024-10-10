@@ -83,4 +83,16 @@ export default class EvaluacionController {
             filtro:filtro
         })
     }
+
+    async mostar_comentario_id({request, response}:HttpContext){
+        const {id} = request.body()
+        const comentario = await Evaluacion.query()
+        .select('comentario') 
+        .where('id', id)
+        .first()
+
+        return response.status(200).json({
+            comentario: comentario
+        })
+    }
 }
