@@ -106,7 +106,6 @@ export default class UsuariosController {
         const filtro = await User.query()
 
         return response.status(200).json({
-            titulo:'smn',
             filtro:filtro
         })
     }
