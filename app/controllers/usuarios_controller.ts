@@ -103,7 +103,7 @@ export default class UsuariosController {
             query = query.where('area',area)
         }
 
-        const filtro = await User.query()
+        const filtro = await query
 
         return response.status(200).json({
             filtro:filtro
