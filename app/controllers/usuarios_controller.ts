@@ -118,54 +118,53 @@ export default class UsuariosController {
                 return response.status(400).json({
                     titulo: 'Error',
                     mensaje: 'ID no proporcionado'
-                });
+                })
             }
     
             const user = await User.query()
                 .where('id', id)
-                .firstOrFail();
+                .firstOrFail()
     
             return response.status(200).json({
                 titulo: 'Éxito',
                 mensaje: 'Usuario encontrado',
                 usuario: user
-            });
+            })
     
         } catch (error) {
             // Captura el error si el usuario no es encontrado
             return response.status(404).json({
                 titulo: 'Error',
                 mensaje: 'Usuario no encontrado'
-            });
+            })
         }
     }
 
     async editar_usuario({ request, response }: HttpContext) {
         try {
-            const { id, nombre, apellidos, usuario, estatus, area, puesto, correo, telefono } = request.body();
+            const { id, nombre, apellidos, usuario, area, puesto, correo, telefono } = request.body()
     
-            const userEdit = await User.findByOrFail('id', id);
+            const userEdit = await User.findByOrFail('id', id)
     
-            userEdit.nombre = nombre;
-            userEdit.apellidos = apellidos;
-            userEdit.usuario = usuario;
-            userEdit.estatus = estatus;
-            userEdit.area = area;
-            userEdit.puesto = puesto;
-            userEdit.correo = correo;     
-            userEdit.telefono = telefono;  
+            userEdit.nombre = nombre ?? userEdit.nombre
+            userEdit.apellidos = apellidos ?? userEdit.apellidos
+            userEdit.usuario = usuario ?? userEdit.usuario
+            userEdit.area = area ?? userEdit.area
+            userEdit.puesto = puesto ?? userEdit.puesto
+            userEdit.correo = correo ?? userEdit.correo     
+            userEdit.telefono = telefono ?? userEdit.telefono  
     
-            await userEdit.save();
+            await userEdit.save()
     
             return response.status(200).json({
                 titulo: 'Función exitosa',
                 usuario: userEdit
-            });
+            })
         } catch (error) {
             return response.status(400).json({
                 titulo: 'Error al actualizar el usuario',
                 error: error.message
-            });
+            })
         }
     }    
 }
