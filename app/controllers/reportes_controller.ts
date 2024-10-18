@@ -2,36 +2,62 @@ import Reporte from '#models/reporte'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ReportesController {
-    async crear_reporte({request, response}:HttpContext){
+    async crear_reporte({ request, response }: HttpContext) {
         try {
-            const{folio, categoria, no_empleado, grupo, nombre, descripcion, planta, telefono} = request.body()
+            const { categoria, no_empleado, grupo, nombre, descripcion, planta, telefono } = request.body();
             const reporte = new Reporte();
             const date = new Date(); // La fecha actual
 
-            reporte.folio = folio
-            reporte.fecha = date.toISOString().split('T')[0];          
-            reporte.categoria = categoria
-            reporte.no_empleado = no_empleado
-            reporte.grupo = grupo 
-            reporte.nombre = nombre
-            reporte.descripcion = descripcion
-            reporte.planta = planta
-            reporte.telefono = telefono
+            // Determina el prefijo del folio basado en la planta
+            let folioPrefix;
+            if (planta === '1') {
+            folioPrefix = '01';
+            } else if (planta === '2') {
+            folioPrefix = '02';
+            } else {
+            return response.status(400).json({
+                titulo: 'Error',
+                mensaje: 'Planta desconocida'
+            });
+            }
 
-            await reporte.save()
+            // Encuentra el último reporte de la misma planta
+            const ultimoReporte = await Reporte.query()
+            .where('planta', planta)
+            .orderBy('fecha', 'desc')
+            .first();
+
+            // Genera el nuevo folio
+            let nuevoFolio;
+            if (ultimoReporte) {
+            const ultimoFolio = parseInt(ultimoReporte.folio.split('-')[1], 10); // Obtiene el número actual del folio
+            nuevoFolio = `${folioPrefix}-${(ultimoFolio + 1).toString().padStart(3, '0')}`; // Incrementa y asegura que tenga 3 dígitos
+            } else {
+            nuevoFolio = `${folioPrefix}-100`; // Si no hay registros previos, empieza en 100
+            }
+
+            reporte.folio = nuevoFolio;
+            reporte.fecha = date.toISOString().split('T')[0];
+            reporte.categoria = categoria;
+            reporte.no_empleado = no_empleado;
+            reporte.grupo = grupo;
+            reporte.nombre = nombre;
+            reporte.descripcion = descripcion;
+            reporte.planta = planta;
+            reporte.telefono = telefono;
+
+            await reporte.save();
 
             return response.status(200).json({
-                titulo: 'Exito',
-                mensaje: 'Reporte enviado con exito',
-                reporte:reporte
-            })
-            
-        } catch (error) {
-            return response.status(400).json({
-                titulo:'Error',
-                error:error.message
-            })
-            
+            titulo: 'Éxito',
+            mensaje: 'Reporte enviado con éxito',
+            reporte: reporte
+            });
+            } catch (error) {
+                return response.status(400).json({
+                titulo: 'Error',
+                error: error.message
+            });
         }
-    }
+    }   
 }
