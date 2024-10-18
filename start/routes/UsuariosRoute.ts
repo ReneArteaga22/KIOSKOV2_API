@@ -3,6 +3,7 @@ import router from '@adonisjs/core/services/router'
 
 router.group(()=>{
     router.get('/index',[UsuariosController,'index'])
+    router.post('/mail',[UsuariosController,'store'])
 
     router.put('/editar-usuario',[UsuariosController,'editar_usuario'])
     router.put('/recuperar-contrasena',[UsuariosController,'recuperar_contrasena'])
