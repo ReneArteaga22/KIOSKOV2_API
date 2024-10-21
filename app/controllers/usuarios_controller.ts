@@ -1,18 +1,27 @@
 import User from '#models/user'
 import type { HttpContext } from '@adonisjs/core/http'
 import hash from '@adonisjs/core/services/hash'
+import mail from '@adonisjs/mail/services/main'
 
 export default class UsuariosController {
 
 
     async index({response}:HttpContext){
-        const usuarios = await User.all()
-        return response.status(200).json({
-            titulo:'Exito',
-            mensaje:'Lista de usuarios',
-            usuarios:usuarios
-            
-        })
+        try {
+            const usuarios = await User.all()
+            return response.status(200).json({
+                titulo:'Exito',
+                mensaje:'Lista de usuarios',
+                usuarios:usuarios
+                
+            })
+        } catch (error) {
+            return response.status(400).json({
+                titulo:'ojo',
+                error:error.message
+            })
+        }
+
     }
 
     async register({request, response}:HttpContext){
@@ -108,5 +117,85 @@ export default class UsuariosController {
         return response.status(200).json({
             filtro:filtro
         })
+    }
+
+    async usuario_x_id({request, response}:HttpContext){
+        try {
+            const {id} = request.body()
+    
+            if (!id) {
+                return response.status(400).json({
+                    titulo: 'Error',
+                    mensaje: 'ID no proporcionado'
+                })
+            }
+    
+            const user = await User.query()
+                .where('id', id)
+                .firstOrFail()
+    
+            return response.status(200).json({
+                titulo: 'Éxito',
+                mensaje: 'Usuario encontrado',
+                usuario: user
+            })
+    
+        } catch (error) {
+            // Captura el error si el usuario no es encontrado
+            return response.status(404).json({
+                titulo: 'Error',
+                mensaje: 'Usuario no encontrado'
+            })
+        }
+    }
+
+    async editar_usuario({ request, response }: HttpContext) {
+        try {
+            const { id, nombre, apellidos, usuario, area, puesto, correo, telefono } = request.body()
+    
+            const userEdit = await User.findByOrFail('id', id)
+    
+            userEdit.nombre = nombre ?? userEdit.nombre
+            userEdit.apellidos = apellidos ?? userEdit.apellidos
+            userEdit.usuario = usuario ?? userEdit.usuario
+            userEdit.area = area ?? userEdit.area
+            userEdit.puesto = puesto ?? userEdit.puesto
+            userEdit.correo = correo ?? userEdit.correo     
+            userEdit.telefono = telefono ?? userEdit.telefono  
+    
+            await userEdit.save()
+    
+            return response.status(200).json({
+                titulo: 'Función exitosa',
+                usuario: userEdit
+            })
+        } catch (error) {
+            return response.status(400).json({
+                titulo: 'Error al actualizar el usuario',
+                error: error.message
+            })
+        }
+    }   
+
+    async store({ response, request }: HttpContext) {
+        try {
+            const { correo } = request.only(['correo']);     
+
+            await mail.send((message) => {
+              message
+                .to(correo)
+                .subject('Clayens NP North.')
+            })
+
+            return response.status(200).json({
+                titulo:'Exito',
+                mensaje:`Correo enviado a este correo: ${correo}`
+            })
+        } catch (error) {
+            return response.status(200).json({
+                titulo:'Error',
+                error:error.message
+            })
+        }
     }
 }
