@@ -60,4 +60,22 @@ export default class ReportesController {
             });
         }
     }   
+
+
+    async reportes({response}:HttpContext){
+        try {
+            const resportes = await Reporte.all()
+            return response.status(200).json({
+                titulo:'Exito',
+                mensaje:'Lista de reportes',
+                reportes: resportes
+            })
+        } catch (error) {
+            return response.status(200).json({
+                titulo:'Error',
+                mensaje:'Algo sucedio al procesar la solicitud :/',
+                error:error.message
+            })
+        }
+    }
 }
