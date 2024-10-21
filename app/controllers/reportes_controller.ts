@@ -78,4 +78,24 @@ export default class ReportesController {
             })
         }
     }
+
+    async reporte_x_id({response, request}:HttpContext){
+        try {
+            const{id} = request.body()
+            const reporte = await Reporte.query()
+            .where('id',id)
+            .firstOrFail()
+
+            return response.status(200).json({
+                titulo:'Exito',
+                mensaje:'Reporte obtenido',
+                reporte:reporte
+            })
+        } catch (error) {
+            return response.status(400).json({
+                titulo:'Error',
+                error:error.message
+            })
+        }
+    }
 }
