@@ -4,7 +4,7 @@ import EmployeesController from '#controllers/employees_controller'
 
 router.group(()=>{
     router.get('/index',[UsuariosController,'index'])
-    router.post('/mail',[UsuariosController,'store'])
+    
     router.get('/employees',async (ctx) => {
         const controller = new EmployeesController()
         return await controller.index(ctx)
