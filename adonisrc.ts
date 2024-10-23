@@ -1,6 +1,18 @@
 import { defineConfig } from '@adonisjs/core/app'
 
 export default defineConfig({
+
+  // {
+  //   commands: [
+  //     // ...other commands
+  //     () => import('@adonisjs/mail/commands')
+  //   ],
+  //   providers: [
+  //     // ...other providers
+  //     () => import('@adonisjs/mail/mail_provider')
+  //   ]
+  // }
+  
   /*
   |--------------------------------------------------------------------------
   | Commands
@@ -10,7 +22,11 @@ export default defineConfig({
   | will be scanned automatically from the "./commands" directory.
   |
   */
-  commands: [() => import('@adonisjs/core/commands'), () => import('@adonisjs/lucid/commands')],
+  commands: [
+    () => import('@adonisjs/core/commands'), () => import('@adonisjs/lucid/commands'),
+    //  () => import('@adonisjs/mail/commands'),
+    // () => import('@adonisjs/mail/mail_provider')
+  ],
 
   /*
   |--------------------------------------------------------------------------
@@ -22,6 +38,7 @@ export default defineConfig({
   |
   */
   providers: [
+    // () => import('@adonisjs/mail/mail_provider'),
     () => import('@adonisjs/cors/cors_provider'),
     () => import('@adonisjs/core/providers/app_provider'),
     () => import('@adonisjs/core/providers/hash_provider'),
@@ -32,7 +49,8 @@ export default defineConfig({
     () => import('@adonisjs/core/providers/vinejs_provider'),
     () => import('@adonisjs/cors/cors_provider'),
     () => import('@adonisjs/lucid/database_provider'),
-    () => import('@adonisjs/auth/auth_provider')
+    () => import('@adonisjs/auth/auth_provider'),
+    // () => import('@adonisjs/mail/mail_provider')
   ],
 
   /*

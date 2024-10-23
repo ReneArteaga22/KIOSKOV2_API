@@ -1,18 +1,27 @@
 import User from '#models/user'
 import type { HttpContext } from '@adonisjs/core/http'
 import hash from '@adonisjs/core/services/hash'
+// import mail from '@adonisjs/mail/services/main'
 
 export default class UsuariosController {
 
 
     async index({response}:HttpContext){
-        const usuarios = await User.all()
-        return response.status(200).json({
-            titulo:'Exito',
-            mensaje:'Lista de usuarios',
-            usuarios:usuarios
-            
-        })
+        try {
+            const usuarios = await User.all()
+            return response.status(200).json({
+                titulo:'Exito',
+                mensaje:'Lista de usuarios',
+                usuarios:usuarios
+                
+            })
+        } catch (error) {
+            return response.status(400).json({
+                titulo:'ojo',
+                error:error.message
+            })
+        }
+
     }
 
     async register({request, response}:HttpContext){
@@ -166,5 +175,27 @@ export default class UsuariosController {
                 error: error.message
             })
         }
-    }    
+    }   
+
+    // async store({ response, request }: HttpContext) {
+    //     try {
+    //         const { correo } = request.only(['correo']);     
+
+    //         await mail.send((message) => {
+    //           message
+    //             .to(correo)
+    //             .subject('Clayens NP North.')
+    //         })
+
+    //         return response.status(200).json({
+    //             titulo:'Exito',
+    //             mensaje:`Correo enviado a este correo: ${correo}`
+    //         })
+    //     } catch (error) {
+    //         return response.status(200).json({
+    //             titulo:'Error',
+    //             error:error.message
+    //         })
+    //     }
+    // }
 }

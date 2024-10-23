@@ -1,6 +1,5 @@
 //Archivo de rutas
 import router from '@adonisjs/core/services/router'
-
 import EmployeesController from '#controllers/employees_controller'
 
 import './routes/UsuariosRoute.ts'
