@@ -26,7 +26,6 @@ export default class EvaluacionController {
                 error:error.message
             })
         }
-
     }
 
     async evaluaciones_comedor({response}:HttpContext){
@@ -104,3 +103,17 @@ export default class EvaluacionController {
         })
     }
 }
+
+// {
+// 	"nombre":"comedor",
+// 	"apellidos":"planta1",
+// 	"usuario":"comedor.1",
+// 	"contrasena":"comedor.1",
+// 	"area":"comedor_1",
+// 	"estatus":"activo",
+// 	"puesto":"comedor",
+// 	"firma":"si",
+// 	"correo":"comedor1@gmail.com",
+// 	"telefono":"7321111",
+// 	"foto":"no"
+// }
