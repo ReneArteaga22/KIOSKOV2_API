@@ -5,6 +5,7 @@ import EmployeesController from '#controllers/employees_controller'
 import './routes/UsuariosRoute.ts'
 import './routes/EvaluacionRoute.ts'
 import './routes/ReportesRoute.ts'
+import './routes/ComunicadoRoute.ts'
 
 router.get('/', async () => {
     return { hello: 'your route works!' }
