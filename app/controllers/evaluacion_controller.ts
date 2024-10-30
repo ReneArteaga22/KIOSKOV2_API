@@ -3,100 +3,107 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class EvaluacionController {
 
-    async evaluar_servicio({response, request}:HttpContext){
+    async evaluar_servicio({ response, request }: HttpContext) {
         try {
-            const {calificacion, comentario, planta, servicio} = request.body()
+            const { calificacion, comentario, planta, servicio } = request.body()
 
             const evaluacion = new Evaluacion
             evaluacion.calificacion = calificacion
             evaluacion.comentario = comentario
             evaluacion.planta = planta
             evaluacion.servicio = servicio
-    
+
             await evaluacion.save()
-    
+
             return response.status(200).json({
-                titulo:'Exito',
-                mensaje:'Evaluacion guardada con exito',
-                evaluacion:evaluacion
+                titulo: 'Exito',
+                mensaje: 'Evaluacion guardada con exito',
+                evaluacion: evaluacion
             })
         } catch (error) {
             return response.status(400).json({
-                titulo:'Error',
-                error:error.message
+                titulo: 'Error',
+                error: error.message
             })
         }
     }
 
-    async evaluaciones_comedor({response}:HttpContext){
+    async evaluaciones_comedor({ response }: HttpContext) {
         const evaluacionComedor = await Evaluacion.query()
-        .where('servicio','comedor')
+            .where('servicio', 'comedor')
+            .orderBy('createdAt', 'desc')
 
         return response.status(200).json({
-            tiutlo:'Exito',
-            mensaje:'Evaluaciones de comedor',
-            evaluaciones:evaluacionComedor
+            tiutlo: 'Exito',
+            mensaje: 'Evaluaciones de comedor',
+            evaluaciones: evaluacionComedor
         })
     }
 
-    async evaluaciones_transporte({response}:HttpContext){
+    async evaluaciones_transporte({ response }: HttpContext) {
         const evaluacionTransporte = await Evaluacion.query()
-        .where('servicio','transporte')
+            .where('servicio', 'transporte')
 
         return response.status(200).json({
-            titulo:'Exito',
-            mensaje:'Evaluaciones de transporte',
-            evaluaciones:evaluacionTransporte
+            titulo: 'Exito',
+            mensaje: 'Evaluaciones de transporte',
+            evaluaciones: evaluacionTransporte
         })
     }
 
-    
     async filtrar_evaluaciones_comedor({ response, request }: HttpContext) {
-        const { calificacion, planta } = request.body()
+        const { calificacion, planta, fechas } = request.body();
+        console.log('Datos recibidos:', { calificacion, planta, fechas }); // Verifica los datos recibidos
 
-        let query = Evaluacion.query()
+        let query = Evaluacion.query().where('servicio', 'comedor');
 
         if (calificacion) {
-            query = query.where('calificacion', 'like', `%${calificacion}%`)
-            query = query.andWhere('servicio','comedor')
+            query = query.where('calificacion', 'like', `%${calificacion}%`);
         }
-    
+
         if (planta) {
-            query = query.where('planta','like',`%${planta}%`)
-            query = query.andWhere('servicio','comedor')
+            query = query.where('planta', 'like', `%${planta}%`);
         }
 
-       const filtro = await query
+        if (fechas && fechas.length === 2) {
+            const [startDate, endDate] = fechas;
+            console.log('Filtrando por fechas:', { startDate, endDate }); // Verifica las fechas utilizadas para el filtrado
+            query = query.whereBetween('createdAt', [startDate, endDate]);
+        }
+
+       
+        const filtro = await query;
+        console.log('Resultados filtrados:', filtro); // Verifica los resultados filtrados
 
         return response.status(200).json({
-            filtro:filtro
-        })
+            filtro: filtro
+        });
     }
 
-      
+
     async filtrar_evaluaciones_transporte({ response, request }: HttpContext) {
-        const { calificacion} = request.body()
+        const { calificacion } = request.body()
 
         let query = Evaluacion.query()
 
         if (calificacion) {
             query = query.where('calificacion', 'like', `%${calificacion}%`)
-            query = query.andWhere('servicio','transporte')
+            query = query.andWhere('servicio', 'transporte')
         }
 
-       const filtro = await query
+        const filtro = await query
 
         return response.status(200).json({
-            filtro:filtro
+            filtro: filtro
         })
     }
 
-    async mostar_comentario_id({request, response}:HttpContext){
-        const {id} = request.body()
+    async mostar_comentario_id({ request, response }: HttpContext) {
+        const { id } = request.body()
         const comentario = await Evaluacion.query()
-        .select('comentario') 
-        .where('id', id)
-        .first()
+            .select('comentario')
+            .where('id', id)
+            .first()
 
         return response.status(200).json({
             comentario: comentario
