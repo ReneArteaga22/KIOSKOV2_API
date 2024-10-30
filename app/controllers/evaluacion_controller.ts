@@ -31,6 +31,7 @@ export default class EvaluacionController {
     async evaluaciones_comedor({ response }: HttpContext) {
         const evaluacionComedor = await Evaluacion.query()
             .where('servicio', 'comedor')
+            .orderBy('createdAt', 'desc')
 
         return response.status(200).json({
             tiutlo: 'Exito',
@@ -70,6 +71,7 @@ export default class EvaluacionController {
             query = query.whereBetween('createdAt', [startDate, endDate]);
         }
 
+       
         const filtro = await query;
         console.log('Resultados filtrados:', filtro); // Verifica los resultados filtrados
 
