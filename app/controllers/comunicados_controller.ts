@@ -10,4 +10,31 @@ export default class ComunicadosController {
             comunicados:comunicados
         })
     }
+
+    async eliminar_comunicado({ params, response }: HttpContext) {
+        try {
+          const { id } = params;
+          const comunicado = await Comunicado.find(id);
+      
+          if (!comunicado) {
+            return response.status(404).json({
+              titulo: 'Error',
+              mensaje: 'Comunicado no encontrado :('
+            });
+          }
+      
+          await comunicado.delete();
+      
+          return response.status(200).json({
+            titulo: 'Éxito',
+            mensaje: 'Comunicado eliminado exitosamente',
+            comunicado: comunicado
+          });
+        } catch (error) {
+          return response.status(400).json({
+            titulo: 'Error',
+            error: error.message
+          });
+        }
+    }  
 }
