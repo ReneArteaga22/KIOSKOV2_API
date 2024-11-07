@@ -4,8 +4,18 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ComunicadosController {
 
+  async comunicados_menu({response}:HttpContext){
+    const menuComu = await Comunicado.query()
+    .where('tipo','menu')
+
+    response.status(200).json({
+      comunicado:menuComu
+    })
+  }
+
     async comunicados({response}:HttpContext){
-        const comunicados = await Comunicado.all()
+        const comunicados = await Comunicado.query()
+        .where('tipo','comunicado')
         return response.status(200).json({
             titulo:'Exito',
             comunicados:comunicados
@@ -14,34 +24,18 @@ export default class ComunicadosController {
 
     async agregar_comunicado({ response, request }: HttpContext) {
       try {
-          const imagen = request.file('imagen');
-          const nombre = request.input('nombre');
-          const fecha = new Date().toISOString();
-  
-          // Guardar el archivo en public/comunicados
-          if (imagen) {
-              await imagen.move('public/comunicados', {
-                  name: imagen.clientName,
-              });
-  
-              const newComunicado = new Comunicado();
-              newComunicado.imagen = `/comunicados/${imagen.clientName}`;
-              newComunicado.nombre = nombre;
-              newComunicado.fecha = fecha;
-  
-              await newComunicado.save();
-  
-              return response.status(200).json({
-                  titulo: 'Éxito',
-                  mensaje: 'Comunicado creado con éxito',
-                  comunicado: newComunicado,
-              });
-          } else {
-              return response.status(400).json({
-                  titulo: 'Error',
-                  mensaje: 'No se recibió ninguna imagen',
-              });
-          }
+        const {imagen, nombre, tipo } = request.body()
+        const newComunicado = new Comunicado
+        newComunicado.imagen = (`/comunicados/${imagen}`)
+        newComunicado.nombre = nombre
+        newComunicado.tipo = tipo
+
+        await newComunicado.save()
+        return response.status(200).json({
+          titulo:'Exito',
+          mensaje:'comunicado creado con exito',
+          comunicado:newComunicado
+        })
       } catch (error) {
           return response.status(400).json({
               titulo: 'Error',
