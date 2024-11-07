@@ -3,8 +3,18 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ComunicadosController {
 
+  async comunicados_menu({response}:HttpContext){
+    const menuComu = await Comunicado.query()
+    .where('tipo','menu')
+
+    response.status(200).json({
+      comunicado:menuComu
+    })
+  }
+
     async comunicados({response}:HttpContext){
-        const comunicados = await Comunicado.all()
+        const comunicados = await Comunicado.query()
+        .where('tipo','comunicado')
         return response.status(200).json({
             titulo:'Exito',
             comunicados:comunicados
@@ -13,11 +23,11 @@ export default class ComunicadosController {
 
     async agregar_comunicado({response, request}:HttpContext){
       try {
-        const {imagen, nombre, fecha} = request.body()
+        const {imagen, nombre, tipo } = request.body()
         const newComunicado = new Comunicado
         newComunicado.imagen = (`/comunicados/${imagen}`)
         newComunicado.nombre = nombre
-        newComunicado.fecha = fecha
+        newComunicado.tipo = tipo
 
         await newComunicado.save()
         return response.status(200).json({
