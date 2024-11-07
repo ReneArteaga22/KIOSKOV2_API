@@ -1,6 +1,7 @@
 import Comunicado from '#models/comunicado'
 import type { HttpContext } from '@adonisjs/core/http'
 
+
 export default class ComunicadosController {
 
     async comunicados({response}:HttpContext){
@@ -11,27 +12,43 @@ export default class ComunicadosController {
         })
     }
 
-    async agregar_comunicado({response, request}:HttpContext){
+    async agregar_comunicado({ response, request }: HttpContext) {
       try {
-        const {imagen, nombre, fecha} = request.body()
-        const newComunicado = new Comunicado
-        newComunicado.imagen = (`/comunicados/${imagen}`)
-        newComunicado.nombre = nombre
-        newComunicado.fecha = fecha
-
-        await newComunicado.save()
-        return response.status(200).json({
-          titulo:'Exito',
-          mensaje:'comunicado creado con exito',
-          comunicado:newComunicado
-        })
+          const imagen = request.file('imagen');
+          const nombre = request.input('nombre');
+          const fecha = new Date().toISOString();
+  
+          // Guardar el archivo en public/comunicados
+          if (imagen) {
+              await imagen.move('public/comunicados', {
+                  name: imagen.clientName,
+              });
+  
+              const newComunicado = new Comunicado();
+              newComunicado.imagen = `/comunicados/${imagen.clientName}`;
+              newComunicado.nombre = nombre;
+              newComunicado.fecha = fecha;
+  
+              await newComunicado.save();
+  
+              return response.status(200).json({
+                  titulo: 'Éxito',
+                  mensaje: 'Comunicado creado con éxito',
+                  comunicado: newComunicado,
+              });
+          } else {
+              return response.status(400).json({
+                  titulo: 'Error',
+                  mensaje: 'No se recibió ninguna imagen',
+              });
+          }
       } catch (error) {
-        return response.status(400).json({
-          titulo:'Error',
-          error:error.message
-        })
+          return response.status(400).json({
+              titulo: 'Error',
+              error: error.message,
+          });
       }
-    }
+  }
 
     async eliminar_comunicado({ params, response }: HttpContext) {
         try {
