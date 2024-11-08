@@ -74,8 +74,6 @@ export default class ComunicadosController {
     }
   }
 
-
- 
     // async agregar_comunicado({response, request}:HttpContext){
     //   try {
     //     const {imagen, nombre, tipo } = request.body()

@@ -6,4 +6,5 @@ router.group(()=>{
     router.get('/comunicados',[ComunicadosController,'comunicados'])
     router.post('/agregar_comunicado',[ComunicadosController,'agregar_comunicado'])
     router.delete('/eliminar_comunicado/:id',[ComunicadosController,'eliminar_comunicado'])
+    
 }).prefix('/api/comunicado')
