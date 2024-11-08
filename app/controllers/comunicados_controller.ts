@@ -74,28 +74,6 @@ export default class ComunicadosController {
     }
   }
 
-    // async agregar_comunicado({response, request}:HttpContext){
-    //   try {
-    //     const {imagen, nombre, tipo } = request.body()
-    //     const newComunicado = new Comunicado
-    //     newComunicado.imagen = (`/comunicados/${imagen}`)
-    //     newComunicado.nombre = nombre
-    //     newComunicado.tipo = tipo
-
-    //     await newComunicado.save()
-    //     return response.status(200).json({
-    //       titulo:'Exito',
-    //       mensaje:'comunicado creado con exito',
-    //       comunicado:newComunicado
-    //     })
-    //   } catch (error) {
-    //     return response.status(400).json({
-    //       titulo:'Error',
-    //       error:error.message
-    //     })
-    //   }
-    // }
-
     async eliminar_comunicado({ params, response }: HttpContext) {
         try {
           const { id } = params;
