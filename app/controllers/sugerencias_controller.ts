@@ -17,7 +17,7 @@ export default class SugerenciasController {
             const newSugerencia = new Sugerencia
     
             newSugerencia.sugerencia = sugerencia
-    
+
             await newSugerencia.save()
 
             return response.status(200).json({
@@ -26,7 +26,7 @@ export default class SugerenciasController {
                 sugerencia:newSugerencia
             })
         } catch (error) {
-            response.status(200).json({
+            response.status(400).json({
                 titulo:'Error',
                 error:error.message
             })
