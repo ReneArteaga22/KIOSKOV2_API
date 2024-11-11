@@ -1,7 +1,6 @@
 import Comunicado from '#models/comunicado'
 import type { HttpContext } from '@adonisjs/core/http'
 
-
 export default class ComunicadosController {
 
   async comunicados_menu({ response }: HttpContext) {
@@ -13,9 +12,17 @@ export default class ComunicadosController {
     })
   }
 
-  async comunicados({ response }: HttpContext) {
-    const comunicados = await Comunicado.query()
+  async lista_comunicados({ response }: HttpContext) {
+    const menuComu = await Comunicado.query()
       .where('tipo', 'comunicado')
+    return response.status(200).json({
+      titulo: 'Exito',
+      comunicados: menuComu
+    })
+  }
+
+  async comunicados({ response }: HttpContext) {
+    const comunicados = await Comunicado.all()
     return response.status(200).json({
       titulo: 'Exito',
       comunicados: comunicados
