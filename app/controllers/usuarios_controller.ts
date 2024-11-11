@@ -8,7 +8,7 @@ export default class UsuariosController {
 
     async index({response}:HttpContext){
         try {
-            const usuarios = await User.all()
+            const usuarios = await User.query().orderBy('id', 'desc');
             return response.status(200).json({
                 titulo:'Exito',
                 mensaje:'Lista de usuarios',
@@ -103,7 +103,7 @@ export default class UsuariosController {
     async buscar_usuario({ response, request }: HttpContext) {
         const { nombre, area } = request.body()
 
-        let query = User.query()
+        let query = User.query().orderBy('id', 'desc');
 
         if(nombre){
             query = query.where('nombre','like',`%${nombre}%`)
@@ -149,20 +149,29 @@ export default class UsuariosController {
         }
     }
 
-    async editar_usuario({ request, response }: HttpContext) {
+    async editar_usuario({params, request, response }: HttpContext) {
         try {
-            const { id, nombre, apellidos, usuario, area, puesto, correo, telefono } = request.body()
-    
-            const userEdit = await User.findByOrFail('id', id)
-    
-            userEdit.nombre = nombre ?? userEdit.nombre
-            userEdit.apellidos = apellidos ?? userEdit.apellidos
-            userEdit.usuario = usuario ?? userEdit.usuario
-            userEdit.area = area ?? userEdit.area
-            userEdit.puesto = puesto ?? userEdit.puesto
-            userEdit.correo = correo ?? userEdit.correo     
-            userEdit.telefono = telefono ?? userEdit.telefono  
-    
+            const{id} = params
+            const userEdit = await User.find(id)
+
+            if(!userEdit){
+                return response.status(404).json({ 
+                    titulo: 'Error', 
+                    mensaje: 'Usuario no encontrado :(' 
+                });
+            }
+
+            const {estatus, area, puesto, nombre, apellidos, usuario, correo, telefono} = request.only(['estatus','area','puesto','nombre','apellidos','usuario','correo','telefono'])
+
+            userEdit.estatus = estatus || userEdit.estatus
+            userEdit.area = area || userEdit.area
+            userEdit.puesto = puesto || userEdit.puesto
+            userEdit.nombre = nombre || userEdit.nombre
+            userEdit.apellidos = apellidos || userEdit.apellidos
+            userEdit.usuario = usuario || userEdit.usuario
+            userEdit.correo = correo || userEdit.correo
+            userEdit.telefono = telefono || userEdit.telefono
+          
             await userEdit.save()
     
             return response.status(200).json({
@@ -176,6 +185,37 @@ export default class UsuariosController {
             })
         }
     }   
+
+
+    async modificar_estado({params, request, response}:HttpContext){
+        try {
+            const {id} = params
+            const estadoEdit = await User.find(id)
+
+            if(!estadoEdit){
+                return response.status(404).json({ 
+                    titulo: 'Error', 
+                    mensaje: 'Usuario no encontrado :(' 
+                });
+            }
+
+            const{estatus}= request.only(['estatus'])
+
+            estadoEdit.estatus = estatus
+
+            await estadoEdit.save()
+
+            return response.status(200).json({
+                titulo: 'Función exitosa',
+                usuario: estadoEdit
+            })
+        } catch (error) {
+            return response.status(400).json({
+                titulo: 'Error al actualizar el usuario',
+                error: error.message
+            })
+        }
+    }
 
     // async store({ response, request }: HttpContext) {
     //     try {

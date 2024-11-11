@@ -1,7 +1,6 @@
 import Comunicado from '#models/comunicado'
 import type { HttpContext } from '@adonisjs/core/http'
 
-
 export default class ComunicadosController {
 
   async comunicados_menu({ response }: HttpContext) {
