@@ -8,7 +8,7 @@ export default class UsuariosController {
 
     async index({response}:HttpContext){
         try {
-            const usuarios = await User.query().orderBy('id', 'desc');
+            const usuarios = await User.query().orderBy('id', 'desc').whereNot('nombre','comedor').whereNot('nombre','Almacen');
             return response.status(200).json({
                 titulo:'Exito',
                 mensaje:'Lista de usuarios',
@@ -25,28 +25,36 @@ export default class UsuariosController {
     }
 
     async register({request, response}:HttpContext){
-        const {nombre, apellidos, usuario, contrasena, area, estatus, puesto, firma, correo, telefono, foto } = request.body()
+        try {
+            const {nombre, apellidos, usuario, contrasena, area, estatus, puesto, firma, correo, telefono, foto } = request.body()
 
-        const nuevoUsuario = new User
-        nuevoUsuario.nombre = nombre
-        nuevoUsuario.apellidos = apellidos
-        nuevoUsuario.usuario = usuario
-        nuevoUsuario.contrasena = contrasena
-        nuevoUsuario.area = area
-        nuevoUsuario.estatus = estatus
-        nuevoUsuario.puesto = puesto
-        nuevoUsuario.firma = firma
-        nuevoUsuario.correo = correo
-        nuevoUsuario.telefono = telefono
-        nuevoUsuario.foto = foto
-        // nuevoUsuario.id_planta = id_planta
+            const nuevoUsuario = new User
+            nuevoUsuario.nombre = nombre
+            nuevoUsuario.apellidos = apellidos
+            nuevoUsuario.usuario = usuario
+            nuevoUsuario.contrasena = contrasena
+            nuevoUsuario.area = area
+            nuevoUsuario.estatus = estatus
+            nuevoUsuario.puesto = puesto
+            nuevoUsuario.firma = firma
+            nuevoUsuario.correo = correo
+            nuevoUsuario.telefono = telefono
+            nuevoUsuario.foto = foto
+            // nuevoUsuario.id_planta = id_planta
+    
+            nuevoUsuario.save()
+    
+            return response.status(200).json({
+                titulo:'Exito',
+                mensaje:'Usuario registrado'
+            })
+        } catch (error) {
+            return response.status(200).json({
+                titulo:'Error',
+                mensaje:'Ocurrio un error al registrar usuario'
+            })
+        }
 
-        nuevoUsuario.save()
-
-        return response.status(200).json({
-            titulo:'Exito',
-            mensaje:'Usuario registrado'
-        })
     }
 
     async login({request, response}:HttpContext){
@@ -74,30 +82,23 @@ export default class UsuariosController {
     }
 
     async recuperar_contrasena({request, response}:HttpContext){
-        const {correo, nuevaContrasena} = request.body()
-        const usuario = await User.findByOrFail('correo',correo)
-        const contrasenaNuevaHash = await hash.make(nuevaContrasena)
+        const {contrasena, id} = request.only(['id','contrasena'])
+        const user = await User.findByOrFail('id',id)
 
- 
-        if(!usuario){
+        if(!user){
             return response.status(404).json({
                 titulo:'Error',
                 mensaje:'Usuario no existe'
             })
         }
-        if(usuario.correo === correo){
-            usuario.contrasena = contrasenaNuevaHash
-            await usuario.save()
-            return response.status(200).json({
-                titulo:'Exito!',
-                mensaje:'Contraseña recuperada con exito'
-            })
-        }else{
-            return response.status(400).json({
-                titulo:'Error',
-                mensaje:'Contraseña o usuario incorrectos'
-            })
-        }
+
+        user.contrasena = contrasena
+        await user.save()
+        return response.status(200).json({
+            titulo:'Exito!',
+            mensaje:'Contraseña recuperada con exito',
+            con:contrasena
+        })
     }
 
     async buscar_usuario({ response, request }: HttpContext) {
