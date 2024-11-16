@@ -6,6 +6,8 @@ export default class ComunicadosController {
   async comunicados_menu({ response }: HttpContext) {
     const menuComu = await Comunicado.query()
       .where('tipo', 'menu')
+      // .limit(1)
+      // .orderBy('desc')
     return response.status(200).json({
       titulo: 'Exito',
       comunicados: menuComu

@@ -8,7 +8,10 @@ export default class UsuariosController {
 
     async index({response}:HttpContext){
         try {
-            const usuarios = await User.query().orderBy('id', 'desc').whereNot('nombre','comedor').whereNot('nombre','Almacen');
+            const usuarios = await User.query()
+            .orderBy('id', 'desc')
+            .whereNotIn('nombre', ['comedor', 'Almacen', 'Caseta1', 'Caseta2']);
+
             return response.status(200).json({
                 titulo:'Exito',
                 mensaje:'Lista de usuarios',

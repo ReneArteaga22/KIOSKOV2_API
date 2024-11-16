@@ -58,7 +58,7 @@ export default class EvaluacionController {
         let query = Evaluacion.query().where('servicio', 'comedor');
 
         if (calificacion) {
-            query = query.where('calificacion', 'like', `%${calificacion}%`);
+            query = query.where('calificacion', calificacion);
         }
 
         if (planta) {
@@ -87,7 +87,7 @@ export default class EvaluacionController {
         let query = Evaluacion.query()
 
         if (calificacion) {
-            query = query.where('calificacion', 'like', `%${calificacion}%`)
+            query = query.where('calificacion', calificacion)
             query = query.andWhere('servicio', 'transporte')
         }
 
