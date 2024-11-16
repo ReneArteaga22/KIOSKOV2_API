@@ -54,32 +54,33 @@ export default class EvaluacionController {
     async filtrar_evaluaciones_comedor({ response, request }: HttpContext) {
         const { calificacion, planta, fechas } = request.body();
         console.log('Datos recibidos:', { calificacion, planta, fechas }); // Verifica los datos recibidos
-
-        let query = Evaluacion.query().where('servicio', 'comedor');
-
+    
+        let query = Evaluacion.query().where('servicio', 'comedor').orderBy('createdAt', 'desc');
+    
         if (calificacion) {
             query = query.where('calificacion', calificacion);
         }
-
+    
         if (planta) {
             query = query.where('planta', 'like', `%${planta}%`);
         }
-
+    
         if (fechas && fechas.length === 2) {
             const [startDate, endDate] = fechas;
-            console.log('Filtrando por fechas:', { startDate, endDate }); // Verifica las fechas utilizadas para el filtrado
-            query = query.whereBetween('createdAt', [startDate, endDate]);
+            const endDateAdjusted = new Date(endDate);
+            endDateAdjusted.setHours(23, 59, 59, 999); 
+            console.log('Filtrando por fechas:', { startDate, endDateAdjusted }); 
+            query = query.whereBetween('createdAt', [startDate, endDateAdjusted]);
         }
-
-       
+    
         const filtro = await query;
-        console.log('Resultados filtrados:', filtro); // Verifica los resultados filtrados
-
+        console.log('Resultados filtrados:', filtro); 
+    
         return response.status(200).json({
             filtro: filtro
         });
     }
-
+    
 
     async filtrar_evaluaciones_transporte({ response, request }: HttpContext) {
         const { calificacion } = request.body()
