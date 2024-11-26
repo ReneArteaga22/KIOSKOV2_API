@@ -61,11 +61,11 @@ export default class ReportesController {
         }
     }   
 
-
     async reportes({response}:HttpContext){
         try {
             const resportes = await Reporte.query()
             .whereNot('estatus','resuelto')
+            .orderBy('fecha', 'desc')
             return response.status(200).json({
                 titulo:'Exito',
                 mensaje:'Lista de reportes',

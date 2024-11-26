@@ -40,6 +40,19 @@ export default class EvaluacionController {
         })
     }
 
+    async evaluaciones_limpieza({ response }: HttpContext) {
+        const evaluacionLimpieza = await Evaluacion.query()
+            .where('servicio', 'limpieza')
+            .orderBy('createdAt', 'desc')
+
+        return response.status(200).json({
+            tiutlo: 'Exito',
+            mensaje: 'Evaluaciones de limpieza',
+            evaluaciones: evaluacionLimpieza
+        })
+    }
+
+
     async evaluaciones_transporte({ response }: HttpContext) {
         const evaluacionTransporte = await Evaluacion.query()
             .where('servicio', 'transporte')
@@ -49,6 +62,36 @@ export default class EvaluacionController {
             mensaje: 'Evaluaciones de transporte',
             evaluaciones: evaluacionTransporte
         })
+    }
+
+    async filtrar_evaluaciones_limpieza({ response, request }: HttpContext) {
+        const { calificacion, planta, fechas } = request.body();
+        console.log('Datos recibidos:', { calificacion, planta, fechas }); // Verifica los datos recibidos
+    
+        let query = Evaluacion.query().where('servicio', 'limpieza').orderBy('createdAt', 'desc');
+    
+        if (calificacion) {
+            query = query.where('calificacion', calificacion);
+        }
+    
+        if (planta) {
+            query = query.where('planta', 'like', `%${planta}%`);
+        }
+    
+        if (fechas && fechas.length === 2) {
+            const [startDate, endDate] = fechas;
+            const endDateAdjusted = new Date(endDate);
+            endDateAdjusted.setHours(23, 59, 59, 999); 
+            console.log('Filtrando por fechas:', { startDate, endDateAdjusted }); 
+            query = query.whereBetween('createdAt', [startDate, endDateAdjusted]);
+        }
+    
+        const filtro = await query;
+        console.log('Resultados filtrados:', filtro); 
+    
+        return response.status(200).json({
+            filtro: filtro
+        });
     }
 
     async filtrar_evaluaciones_comedor({ response, request }: HttpContext) {
