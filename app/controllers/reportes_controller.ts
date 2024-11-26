@@ -7,7 +7,7 @@ export default class ReportesController {
         try {
             const { categoria, no_empleado, grupo, nombre, descripcion, planta, telefono } = request.body();
             const reporte = new Reporte();
-            const date = new Date(); // La fecha actual
+            const date = new Date()// La fecha actual
 
             // Determina el prefijo del folio basado en la planta
             let folioPrefix;
@@ -31,10 +31,10 @@ export default class ReportesController {
             // Genera el nuevo folio
             let nuevoFolio;
             if (ultimoReporte) {
-            const ultimoFolio = parseInt(ultimoReporte.folio.split('-')[1], 10); // Obtiene el número actual del folio
-            nuevoFolio = `${folioPrefix}-${(ultimoFolio + 1).toString().padStart(3, '0')}`; // Incrementa y asegura que tenga 3 dígitos
+            const ultimoFolio = parseInt(ultimoReporte.folio.split('-')[1], 10) // Obtiene el número actual del folio
+            nuevoFolio = `${folioPrefix}-${(ultimoFolio + 1).toString().padStart(3, '0')}`// Incrementa y asegura que tenga 3 dígitos
             } else {
-            nuevoFolio = `${folioPrefix}-100`; // Si no hay registros previos, empieza en 100
+            nuevoFolio = `${folioPrefix}-100`// Si no hay registros previos, empieza en 100
             }
 
             reporte.folio = nuevoFolio;
@@ -47,13 +47,25 @@ export default class ReportesController {
             reporte.planta = planta;
             reporte.telefono = telefono;
 
-            await reporte.save();
+            await reporte.save()
 
+            let destinatario
+            if (categoria === 'Nominas'){
+                destinatario = 'correo@example.com'
+            }else if(categoria === 'Gafete'){
+                destinatario = 'correo2@example.com'
+            }else{
+                destinatario = "default@example.com"
+            }
+    
+            const email = 'kioskoclayens@gmail.com'
+            
             await mail.send((message)=>{
                 message
+                // .to(destinatario) descomentar esto cuando tengas los correos de cada modulo RH
                 .to('cabellordz15@gmail.com')
-                .from('viktormiller182@gmail.com')
-                .subject('PAPUS')
+                .from(email)
+                .subject('kiosko')
             })
 
             return response.status(200).json({
