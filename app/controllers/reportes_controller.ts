@@ -1,5 +1,6 @@
 import Reporte from '#models/reporte'
 import type { HttpContext } from '@adonisjs/core/http'
+import mail from '@adonisjs/mail/services/main';
 
 export default class ReportesController {
     async crear_reporte({ request, response }: HttpContext) {
@@ -47,6 +48,13 @@ export default class ReportesController {
             reporte.telefono = telefono;
 
             await reporte.save();
+
+            await mail.send((message)=>{
+                message
+                .to('cabellordz15@gmail.com')
+                .from('viktormiller182@gmail.com')
+                .subject('PAPUS')
+            })
 
             return response.status(200).json({
             titulo: 'Éxito',
