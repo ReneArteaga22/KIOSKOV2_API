@@ -96,7 +96,7 @@ export default class EvaluacionController {
 
     async filtrar_evaluaciones_comedor({ response, request }: HttpContext) {
         const { calificacion, planta, fechas } = request.body();
-        console.log('Datos recibidos:', { calificacion, planta, fechas }); // Verifica los datos recibidos
+        // console.log('Datos recibidos:', { calificacion, planta, fechas }); // Verifica los datos recibidos
     
         let query = Evaluacion.query().where('servicio', 'comedor').orderBy('createdAt', 'desc');
     
@@ -112,12 +112,12 @@ export default class EvaluacionController {
             const [startDate, endDate] = fechas;
             const endDateAdjusted = new Date(endDate);
             endDateAdjusted.setHours(23, 59, 59, 999); 
-            console.log('Filtrando por fechas:', { startDate, endDateAdjusted }); 
+            // console.log('Filtrando por fechas:', { startDate, endDateAdjusted }); 
             query = query.whereBetween('createdAt', [startDate, endDateAdjusted]);
         }
     
         const filtro = await query;
-        console.log('Resultados filtrados:', filtro); 
+        // console.log('Resultados filtrados:', filtro); 
     
         return response.status(200).json({
             filtro: filtro
