@@ -4,6 +4,15 @@ import mail from '@adonisjs/mail/services/main'
 
 export default class ReporteSeguridadsController {
 
+    async reportes_seguridad({response}:HttpContext){
+        const reportes = await ReporteSeguridad.all()
+
+        return response.status(200).json({
+            titulo:'exito',
+            reportes:reportes
+        })
+    }
+
     async crear_reporte({request, response}:HttpContext){
         const {nombre, num_empleado, categoria, descripcion} = request.body()
         const reporte = new ReporteSeguridad()
@@ -29,6 +38,30 @@ export default class ReporteSeguridadsController {
             titulo:'Exito',
             mensaje:'Se creo el reporte',
             reporte:reporte
+        })
+    }
+
+    async filtrar_reporte_seguridad ({request, response}:HttpContext){
+        const{categoria, fechas} = request.body()
+        let query = ReporteSeguridad.query()
+
+        if(categoria){
+            query = query.where('categoria',categoria)
+        }
+
+        if (fechas && fechas.length === 2) {
+            const [startDate, endDate] = fechas;
+            const endDateAdjusted = new Date(endDate);
+            endDateAdjusted.setHours(23, 59, 59, 999); 
+            console.log('Filtrando por fechas:', { startDate, endDateAdjusted }); 
+            query = query.whereBetween('createdAt', [startDate, endDateAdjusted]);
+        }
+
+        const filtro = await query
+
+        return response.status(200).json({
+            titulo:'Exito',
+            reportes:filtro
         })
     }
 }
