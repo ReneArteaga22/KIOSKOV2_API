@@ -10,4 +10,21 @@ export default class EmployeesController {
             return response.status(500).json({message:'Error en la consulta', error})
         }
     }
+
+    async gerencia({response}:HttpContext){
+
+        const gerencia = await Employee.query().where('nombres','ANTONI')
+        // const{puesto} = request.body()
+        // let query = Employee.query()
+
+        // if(puesto){
+        //     query = query.where('Gerencia',puesto)
+        // }
+
+
+        return response.status(200).json({
+            titulo:'Exito',
+            reportes:gerencia
+        })
+    }
 }

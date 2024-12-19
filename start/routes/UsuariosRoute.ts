@@ -9,6 +9,7 @@ router.group(()=>{
         const controller = new EmployeesController()
         return await controller.index(ctx)
     })
+    router.get('/dev',[EmployeesController,'gerencia'])
 
     router.put('/modificar_estado/:id',[UsuariosController,'modificar_estado'])
     router.put('/editar-usuario/:id',[UsuariosController,'editar_usuario'])

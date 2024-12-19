@@ -23,9 +23,21 @@ export default class ReporteSeguridadsController {
         reporte.descripcion = descripcion
 
         await reporte.save()
+        
+        let destinatario:string
+
+        if (categoria === 'Nominas'){
+            destinatario = 'carlo.sanches@clayens.com'
+        }else if(categoria === 'Gafete'){
+            destinatario = 'raul.reyes@clayens.com'
+        }else if(categoria === 'Retiro Ahorro'){
+            destinatario = "default@example.com"
+        }else if(categoria === 'Consulta Vacaciones'){
+            destinatario = 'default@gmail.com'
+        }
 
         const email = 'kioskoclayens@gmail.com'
-            
+
         await mail.send((message)=>{
             message
             // .to(destinatario) descomentar esto cuando tengas los correos de cada modulo RH
