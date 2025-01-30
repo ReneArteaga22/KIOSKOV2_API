@@ -5,7 +5,10 @@ export default class EmployeesController {
     public async index({ response }: HttpContext) {
         try {
             const employee = await Employee.all()
-            return response.json(employee)
+            return response.status(200).json({
+                titulo:'Exito',
+                usuarios:employee
+            })
         } catch (error) {
             return response.status(500).json({message:'Error en la consulta', error})
         }

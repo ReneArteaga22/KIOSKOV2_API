@@ -49,21 +49,16 @@ export default class ReportesController {
 
             await reporte.save()
 
-            let destinatario
-            if (categoria === 'Nominas'){
-                destinatario = 'correo@example.com'
-            }else if(categoria === 'Gafete'){
-                destinatario = 'correo2@example.com'
-            }else{
-                destinatario = "default@example.com"
-            }
-    
+         
             const email = 'kioskoclayens@gmail.com'
             
             await mail.send((message)=>{
+                let destinatario='raul.reyes@clayens.com'
+                let destinatario1='sofia.herrera@clayens.com'
+        
                 message
                 // .to(destinatario) descomentar esto cuando tengas los correos de cada modulo RH
-                .to('cabellordz15@gmail.com')
+                .to(destinatario, destinatario1)
                 .from(email)
                 .subject('kiosko')
             })
@@ -73,6 +68,7 @@ export default class ReportesController {
             mensaje: 'Reporte enviado con éxito',
             reporte: reporte
             });
+            
             } catch (error) {
                 return response.status(400).json({
                 titulo: 'Error',
