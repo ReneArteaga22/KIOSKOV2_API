@@ -128,11 +128,11 @@ export default class EvaluacionController {
     async filtrar_evaluaciones_transporte({ response, request }: HttpContext) {
         const { calificacion } = request.body()
 
-        let query = Evaluacion.query()
+        let query = Evaluacion.query().orderBy('createdAt', 'desc');
 
         if (calificacion) {
             query = query.where('calificacion', calificacion)
-            query = query.andWhere('servicio', 'transporte')
+            query = query.andWhere('servicio', 'transporte').orderBy('createdAt', 'desc');
         }
 
         const filtro = await query
