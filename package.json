@@ -60,6 +60,7 @@
     "@adonisjs/static": "^1.1.1",
     "@vinejs/vine": "^2.1.0",
     "dotenv": "^16.4.5",
+    "edge.js": "^6.2.1",
     "luxon": "^3.5.0",
     "mssql": "^11.0.1",
     "mysql2": "^3.11.3",
