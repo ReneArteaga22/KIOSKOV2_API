@@ -56,11 +56,24 @@ export default class EvaluacionController {
     async evaluaciones_transporte({ response }: HttpContext) {
         const evaluacionTransporte = await Evaluacion.query()
             .where('servicio', 'transporte')
+            .orderBy('createdAt', 'desc')
 
         return response.status(200).json({
             titulo: 'Exito',
             mensaje: 'Evaluaciones de transporte',
             evaluaciones: evaluacionTransporte
+        })
+    }
+
+    async evaluaciones_enfermeria({ response }: HttpContext) {
+        const evaluacionEnfermeria = await Evaluacion.query()
+            .where('servicio', 'enfermeria')
+            .orderBy('createdAt', 'desc')
+
+        return response.status(200).json({
+            titulo: 'Exito',
+            mensaje: 'Evaluaciones de enfermeria',
+            evaluaciones: evaluacionEnfermeria
         })
     }
 
@@ -133,6 +146,23 @@ export default class EvaluacionController {
         if (calificacion) {
             query = query.where('calificacion', calificacion)
             query = query.andWhere('servicio', 'transporte').orderBy('createdAt', 'desc');
+        }
+
+        const filtro = await query
+
+        return response.status(200).json({
+            filtro: filtro
+        })
+    }
+
+    async filtrar_evaluaciones_enfermeria({ response, request }: HttpContext) {
+        const { calificacion } = request.body()
+
+        let query = Evaluacion.query().orderBy('createdAt', 'desc');
+
+        if (calificacion) {
+            query = query.where('calificacion', calificacion)
+            query = query.andWhere('servicio', 'enfermeria').orderBy('createdAt', 'desc');
         }
 
         const filtro = await query

@@ -49,13 +49,20 @@ export default class SendEmailsController {
 
     async reporte_soporte_recursos_humanos({request, response}:HttpContext){
         const{categoria, no_empleado, grupo, nombre, descripcion, planta, telefono} = request.body()
+            
+        if(!categoria || !no_empleado || !grupo || !nombre || !descripcion || !planta || !telefono){
+            return response.status(404).json({
+                titulo: 'Error',
+                mensaje: 'Faltan datos obligatorios en la solicitud'
+            })
+        }
         const reporte = new Reporte()
         const date = new Date()
 
         let folioPrefix
         if(planta === '1'){
             folioPrefix = '01'
-        }else if(planta === '02'){
+        }else if(planta === '2'){
             folioPrefix = '02'
         }else{
             return response.status(400).json({
@@ -99,19 +106,29 @@ export default class SendEmailsController {
             destinatarios = ['cabellordz15@gmail.com']
         }else if(categoria === 'Consulta Vacacioens'){
             destinatarios = ['cabellordz15@gmail.com']
+        }else if(categoria === 'Enfermeria'){
+            destinatarios = ['cabellordz15@gmail.com']
         }
 
         const email = 'kioskoclayens@gmail.com'
 
-        await mail.send((message)=>{
-            destinatarios.forEach(destino =>{
-                message.to(destino)
+        try {
+            await mail.send((message)=>{
+                destinatarios.forEach(destino =>{
+                    message.to(destino)
+                })
+                message
+                .from(email)
+                .subject('Reporte de Kiosko Clayens')
+                .htmlView('emails/rh_email_html')
             })
-            message
-            .from(email)
-            .subject('Reporte de Kiosko Clayens')
-            .htmlView('emails/rh_email_html')
-        })
+        } catch (errorMail) {
+            return response.status(404).json({
+                titulo:'Error',
+                mensaje:'Ocurrio un error al mandar el correo: ' + errorMail.message 
+            })
+        }
+
 
         return response.status(200).json({
             titulo:'Exito!',

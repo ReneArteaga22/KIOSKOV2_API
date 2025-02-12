@@ -5,8 +5,7 @@ import EmployeesController from '#controllers/employees_controller'
 router.group(()=>{
     router.get('/index',[UsuariosController,'index'])
     router.get('/employees',[EmployeesController,'index'])
-
-
+    
     router.put('/modificar_estado/:id',[UsuariosController,'modificar_estado'])
     router.put('/editar-usuario/:id',[UsuariosController,'editar_usuario'])
     router.put('/recuperar-contrasena',[UsuariosController,'recuperar_contrasena'])
