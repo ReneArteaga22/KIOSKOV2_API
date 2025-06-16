@@ -1,12 +1,14 @@
 import Avance from '#models/avance'
 import Observacion from '#models/observacion'
-import Equipo from '#models/equipo'
 import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
 
 export default class AvancesController {
   // POST /api/avances
   async actualizarAvance({ request, response }: HttpContext) {
+     const now = DateTime.now().setZone('America/Mexico_City');
+      const horaMexico = now.toFormat('HH:mm:ss');
+     console.log(horaMexico)
     try {
       const { userId, porcentajeAvance } = request.body()
 
@@ -19,6 +21,7 @@ export default class AvancesController {
       {
         await avance.merge({
           porcentajeAvance:porcentajeAvance,
+          hora:horaMexico
         }).save()
         return response.status(200).json({
           msg: 'Avance registrado correctamente',

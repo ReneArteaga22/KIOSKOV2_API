@@ -17,6 +17,10 @@ export default class Avance extends BaseModel {
   @column.date()
   declare fecha: DateTime
 
+  @column ()
+  declare hora: string
+
+
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
 }
