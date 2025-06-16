@@ -6,23 +6,25 @@ import { DateTime } from 'luxon'
 
 export default class AvancesController {
   // POST /api/avances
-  async registrar({ request, response }: HttpContext) {
+  async actualizarAvance({ request, response }: HttpContext) {
     try {
       const { userId, porcentajeAvance } = request.body()
 
       // 1. Crear avance
-      const avance = new Avance()
-      avance.userId = userId
-      avance.porcentajeAvance = porcentajeAvance
-      avance.fecha = DateTime.local()
+      const avance = await Avance.query()
+      .where('user_id',userId)
+      .first()
 
-      await avance.save()
-
-      return response.status(200).json({
-        titulo: 'Éxito',
-        mensaje: 'Avance registrado correctamente',
-        avance
-      })
+      if(avance)
+      {
+        await avance.merge({
+          porcentajeAvance:porcentajeAvance,
+        }).save()
+        return response.status(200).json({
+          msg: 'Avance registrado correctamente',
+          data:avance
+        })
+      }
 
   } catch (error) {
       return response.status(400).json({
