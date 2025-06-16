@@ -8,11 +8,11 @@ export default class AvancesController {
   // POST /api/avances
   async registrar({ request, response }: HttpContext) {
     try {
-      const { equipoId, porcentajeAvance } = request.body()
+      const { userId, porcentajeAvance } = request.body()
 
       // 1. Crear avance
       const avance = new Avance()
-      avance.equipoId = equipoId
+      avance.userId = userId
       avance.porcentajeAvance = porcentajeAvance
       avance.fecha = DateTime.local()
 
@@ -36,7 +36,7 @@ export default class AvancesController {
   async verTodos({ response }: HttpContext) {
     try {
       const avances = await Avance.query()
-        .preload('equipo')
+        .preload('user')
         .orderBy('fecha', 'desc')
 
       return response.status(200).json({
@@ -54,15 +54,15 @@ export default class AvancesController {
   // POST /api/avances/equipo
   async verPorEquipo({ request, response }: HttpContext) {
     try {
-      const { equipoId } = request.body()
+      const { userId} = request.body()
 
       const avances = await Avance.query()
-        .where('equipo_id', equipoId)
-        .preload('equipo')
+        .where('user_id', userId)
+        .preload('user')
         .orderBy('fecha', 'desc')
 
       const observaciones = await Observacion.query()
-        .where('equipo_id', equipoId)
+        .where('user_id', userId)
         .orderBy('fecha', 'desc')
 
       return response.status(200).json({
