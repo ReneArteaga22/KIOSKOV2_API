@@ -1,27 +1,24 @@
-import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
-import Equipo from './equipo.js'
+import { BaseModel, column } from '@adonisjs/lucid/orm'
 
-export default class Avance extends BaseModel {
+export default class Comunicado extends BaseModel {
+  public static table = 'comunicaciones'
+   
   @column({ isPrimary: true })
   declare id: number
 
   @column()
-  declare equipoId: number
+  declare imagen:string
 
   @column()
-  declare porcentajeAvance: number
+  declare nombre:string
 
-  @column.date()
-  declare fecha: DateTime
+  @column()
+  declare tipo:string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
-
-  @belongsTo(() => Equipo)
-  declare equipo: BelongsTo<typeof Equipo>
 }
