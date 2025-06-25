@@ -59,21 +59,17 @@ export default class AvancesController {
   // POST /api/avances/equipo
   async verPorEquipo({ request, response }: HttpContext) {
     try {
-      const { userId} = request.body()
+      const { id} = request.body()
 
       const avances = await Avance.query()
-        .where('user_id', userId)
+        .where('id', id)
         .preload('user')
-        .orderBy('fecha', 'desc')
-
-      const observaciones = await Observacion.query()
-        .where('user_id', userId)
         .orderBy('fecha', 'desc')
 
       return response.status(200).json({
         titulo: 'Éxito',
-        avances,
-        observaciones
+        avances
+     
       })
     } catch (error) {
       return response.status(400).json({
