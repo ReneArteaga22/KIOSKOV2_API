@@ -38,6 +38,8 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare telefono:number
   @column()
   declare foto:string
+  @column()
+  declare miembros: { nombre_completo: string; puesto: string }[] | null
 
   // @column()
   // declare id_planta:number
