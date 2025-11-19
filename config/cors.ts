@@ -8,9 +8,9 @@ import { defineConfig } from '@adonisjs/cors'
  */
 const corsConfig = defineConfig({
   enabled: true,
-  origin: true,
+  origin: ['http://kiosko.clayens.com:8080', 'http://localhost:8080', 'http://10.38.12.4:8080'],
   methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE'],
-  headers: true,
+  headers: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-CSRF-Token'],
   exposeHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
   maxAge: 90,
