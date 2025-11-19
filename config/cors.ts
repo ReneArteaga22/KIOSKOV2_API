@@ -18,3 +18,4 @@ const corsConfig = defineConfig({
 
 
 export default corsConfig
+
