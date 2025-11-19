@@ -9,7 +9,7 @@ tmp
 .env.production.local
 .env.development.local
 
-.cors.ts
+src/config/.cors.ts
 
 # Frontend assets compiled code
 public/assets
