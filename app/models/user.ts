@@ -2,10 +2,14 @@
 import Hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 // import type { BelongsTo } from '@adonisjs/lucid/types/relations'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
-
+import type { HasMany } from '@adonisjs/lucid/types/relations'
+import InventarioLocalidad from './inventario_localidad.js'
+import Avance from './avance.js'
+// import { belongsTo } from '@adonisjs/lucid/orm' --- IGNORE ---
+// import User from './user.js' --- IGNORE ---
 const AuthFinder = withAuthFinder(() => Hash.use('scrypt'), {
   uids: ['usuario','correo'],
   passwordColumnName: 'contrasena',
@@ -40,6 +44,16 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare foto:string
   @column()
   declare miembros: { nombre_completo: string; puesto: string }[] | null
+  
+  @hasMany(() => InventarioLocalidad, {
+    foreignKey: 'userId',
+  })
+  declare localidades: HasMany<typeof InventarioLocalidad>
+
+  @hasMany(() => Avance, {
+    foreignKey: 'userId',
+  })
+  declare avances: HasMany<typeof Avance>
 
   // @column()
   // declare id_planta:number
