@@ -10,6 +10,7 @@ import './routes/ComunicadoRoute.ts'
 import './routes/SugerenciaRoute.ts'
 import './routes/EmailsRouter.js'
 import './routes/InventarioRoutes.ts'
+import './routes/HseRoutes.js'
 
 router.get('/', async () => {
     return { hello: 'your route works!' }
