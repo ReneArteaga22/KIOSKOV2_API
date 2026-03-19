@@ -11,6 +11,9 @@ import './routes/SugerenciaRoute.ts'
 import './routes/EmailsRouter.js'
 import './routes/InventarioRoutes.ts'
 import './routes/HseRoutes.js'
+import './routes/EmpleadoRoutes.ts'
+
+
 
 router.get('/', async () => {
     return { hello: 'your route works!' }

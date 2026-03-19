@@ -1,5 +1,4 @@
 import env from '#start/env'
-
 import { defineConfig } from '@adonisjs/lucid'
 
 const dbConfig = defineConfig({
@@ -19,6 +18,19 @@ const dbConfig = defineConfig({
         paths: ['database/migrations'],
       },
     },
+
+    
+    asistencia: {
+      client: 'mysql2', // Usamos el mismo cliente de tu conexión principal
+      connection: {
+        host: env.get('DB_HOST'),
+        port: env.get('DB_PORT'),
+        user: env.get('DB_USER'),
+        password: env.get('DB_PASSWORD'),
+        database: 'asistencia', // Nombre de tu tabla quemado en código
+      },
+    },
+    
     sqlserver: {
       client: 'mssql',
       connection: {
