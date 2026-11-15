@@ -13,6 +13,8 @@ export const ROLES = [
   'VALIDACION',
   'SOLUCIONADOR',
   'AUDITOR_EXTERNO',
+  'VERIFICADOR', 
+  'MONITOR'
 ] as const
 export type RolIntegrante = (typeof ROLES)[number]
 
