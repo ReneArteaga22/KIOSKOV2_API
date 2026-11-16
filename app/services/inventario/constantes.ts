@@ -22,4 +22,4 @@ export type RolIntegrante = (typeof ROLES)[number]
 export const AREA_ADMIN = 'sistemas'
 
 /** Minutos en un mismo estado para marcar una lista como "detenida". Se puede cambiar por query (?umbral=). */
-export const UMBRAL_DETENIDA_MIN = 45
+export const UMBRAL_DETENIDA_MIN = 120
